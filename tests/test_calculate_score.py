@@ -1,15 +1,15 @@
-# import pytest
-# from ten_thousand.game_logic_backup import GameLogic
-#
-# # pytestmark = [pytest.mark.version_1]
-#
-#
-# def test_single_five():
-#     actual = GameLogic.calculate_score((5,))
-#     expected = 50
-#     assert actual == expected
-#
-#
+import pytest
+from ten_thousand.game_logic import GameLogic
+
+# pytestmark = [pytest.mark.version_1]
+
+
+def test_single_five():
+    actual = GameLogic.calculate_score((5,))
+    expected = 50
+    assert actual == expected
+
+
 # def test_single_one():
 #     actual = GameLogic.calculate_score((1,))
 #     expected = 100

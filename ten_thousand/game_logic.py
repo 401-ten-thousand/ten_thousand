@@ -12,3 +12,8 @@ class GameLogic():
         for _ in range(0,num):
             dice_roll.append(random.randint(1,6))
         return tuple(dice_roll)
+
+    @staticmethod
+    def calculate_score(rolled_dice: tuple[int]) -> int:
+
+        return score
