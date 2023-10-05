@@ -6,10 +6,9 @@
 - The length of tuple must match the argument given to `roll_dice` method.
 
 """
-import pytest
 from ten_thousand.game_logic import GameLogic
-
-# pytestmark = [pytest.mark.version_1]
+import pytest
+#pytestmark = [pytest.mark.version_1]
 
 
 def test_1_dice():
@@ -25,7 +24,7 @@ def test_2_dice():
 
     for value in values:
         assert 1 <= value <= 6
-#
+
 
 def test_3_dice():
     values = GameLogic.roll_dice(3)
@@ -57,3 +56,14 @@ def test_6_dice():
 
     for value in values:
         assert 1 <= value <= 6
+
+
+def test_0_dice():
+    # values = GameLogic.roll_dice(0)
+    with pytest.raises(ValueError):
+        values = GameLogic.roll_dice(0)
+
+
+def test_string_dice():
+    with pytest.raises(TypeError):
+        values = GameLogic.roll_dice('hi mom')
