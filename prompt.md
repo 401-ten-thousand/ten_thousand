@@ -8,12 +8,16 @@ import random
 class GameLogic:
     @staticmethod
     def roll_dice(num_dice):
+        # raises warning if input is not an integer
         if not isinstance(num_dice, int):
             raise ValueError("Input must be an integer.")
+        # raises warning if input is not between 1 and 6 exclusive
+        # TODO: should be inclusive instead
         if num_dice < 1 or num_dice > 6:
             raise ValueError("Input must be between 1 and 6 inclusive.")
-        
+        # iterates number of input and generates a random number between 1 and 6, inclusive. formates as tuple
         dice_roll = tuple(random.randint(1, 6) for _ in range(num_dice))
+        # returns/outputs results
         return dice_roll
 ```
 

@@ -145,3 +145,20 @@ def test_all(test_input, expected):
     assert actual == expected
 
 
+def test_not_tuple():
+    with pytest.raises(TypeError):
+        actual = GameLogic.calculate_score([1,2,3,4,5,6])
+
+def test_not_tuple_of_int():
+    with pytest.raises(TypeError):
+        actual = GameLogic.calculate_score(("A","B","C"))
+
+def test_tuple_too_large():
+    with pytest.raises(ValueError):
+        actual = GameLogic.calculate_score((1,2,3,4,5,6,6))
+
+def test_tuple_values_outside_range():
+    with pytest.raises(ValueError):
+        actual = GameLogic.calculate_score((1,2,3,4,5,6,7))
+
+

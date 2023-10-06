@@ -1,64 +1,67 @@
-import random as rd
-from collections import Counter
+import random
 
 class GameLogic():
+    @staticmethod
+    def roll_dice(num: int) -> tuple[int]:
+        # raise error if wrong type is inputted
+        if not isinstance(num, int):
+            raise TypeError('Roll dice must be an integer')
+        # raise error if input is outside of range
+        if num < 1 or num > 6:
+            raise ValueError('Roll dice must be between 1 and 6')
+
+        dice_roll = []
+        for _ in range(0,num):
+            dice_roll.append(random.randint(1,6))
+        return tuple(dice_roll)
 
     @staticmethod
-    def roll_dice(int_n:int) -> tuple[int]:
-        """
-        Function accepts integer(int_n) of how many of 6-sided die.
-        Returns tuple with int_n integers.
-        :param int_num_roll is integer of dice to roll:
-        :return tuple of integers representing sides rolled:
-        """
-        list_return = []
-        for _ in range(0,int_n):
-            int_roll = rd.randint(1,6)
-            list_return.append(int_roll)
-        return tuple(list_return)
+    def calculate_score(dice_roll: tuple[int]) -> int:
+        # raise error if input is not tuple
+        if not isinstance(dice_roll,tuple):
+            raise TypeError('Can only calculate scores for dice rolls with integer values.')
 
+        # raise error if input tuple has any components other than integer
+        if not all([isinstance(i, int) for i in dice_roll]):
+            raise TypeError('Can only calculate scores for dice rolls with integer values.')
 
-    @staticmethod
-    def calculate_score(tuple_dice: tuple[int]) -> int:
-        """
-        Accepts tuple of integers representing the sides of dice rolls
-        Returns total score according to the rules of dice game Ten-Thousand.
-        :param tuple_dice is tuple of integers:
-        :return integer of total score:
-        """
-        # count number of rolls for each side
-        dict_count = Counter(tuple_dice)
-        # score to be returned
-        int_score = 0
-        # to find straight
-        int_singles = 0
-        # to find 3 pairs
-        int_pairs = 0
+        # raise error if tuple is wrong size
+        if len(dice_roll) < 0 or len(dice_roll) > 6:
+            raise ValueError('Can only calculate scores for 1-6 dice rolls.')
 
-        for int_side, int_count in dict_count.items():
-            # looking for straight or 3 pairs
-            if int_count == 1: int_singles += 1
-            if int_count == 2: int_pairs += 1
+        # raise error if tuple contains integers outside of range
+        if any([True if i<1 or i>6 else False for i in dice_roll]):
+            raise ValueError("Values inside of tuple fall outside")
 
-            # summing trios
-            if int_count >= 3:
-                int_const = (int_count - 3) + 1
-                if int_side == 1:
-                    int_score += (1000 * int_side) * int_const
-                else:
-                    int_score += (100 * int_side) * int_const
+        counter = {}
+        c_score = 0
 
-            # summing 5s less than 3 rolls
-            elif int_side == 5:
-                int_score += (50 * int_count)
+        # make counter dictionary
+        for index, value in enumerate(dice_roll):
+            if value in counter:
+                counter[value] += 1
+            else:
+                counter[value] = 1
 
-            # summing 1s less than 3 rolls
-            elif int_side == 1:
-                int_score += (100 * int_count)
+        # find 6 unique values which means there is a straight
+        if len(counter.keys()) == 6 and all([True if value == 1 else False for value in counter.values()]):
+            c_score = 1500
+        # find 3 unique values checking for 3 pairs
+        elif len(counter.keys()) == 3 and all([True if value == 2 else False for value in counter.values()]):
+            c_score = 1500
+        # find trio+
+        else:
+            for key, value in counter.items():
+                if value >= 3:
+                    constant = (value - 3) + 1
+                    if key == 1:
+                        c_score += (key * 1000) * constant
+                    else:
+                        c_score += (key * 100) * constant
 
-        # looking for straight or 3 pair
-        if (int_singles == 6 or int_pairs == 3) and len(tuple_dice) == 6 and int_score < 1500:
-            int_score = 1500
-
-        # return accumulative score achieved
-        return int_score
+                # add 5 and/or 1 scores to total
+                elif key == 5:
+                    c_score += (value * 50)
+                elif key == 1:
+                    c_score += (value * 100)
+        return c_score
