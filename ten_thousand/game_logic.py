@@ -15,7 +15,7 @@ class GameLogic():
 
     @staticmethod
     def calculate_score(dice_roll: tuple[int]) -> int:
-        if len(dice_roll) < 1 or len(dice_roll) > 6:
+        if len(dice_roll) < 0 or len(dice_roll) > 6:
             raise ValueError('can only calculate scores for 1-6 dice rolls')
         counter = {}
         c_score = 0
@@ -42,3 +42,8 @@ class GameLogic():
                     c_score += (key * 1000) * constant
                 else:
                     c_score += (key * 100) * constant
+            elif key == 5:
+                c_score += (value * 50)
+            elif key == 1:
+                c_score += (value * 100)
+        return c_score
