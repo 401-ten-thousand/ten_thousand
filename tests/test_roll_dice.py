@@ -8,7 +8,8 @@
 """
 from ten_thousand.game_logic import GameLogic
 import pytest
-#pytestmark = [pytest.mark.version_1]
+
+pytestmark = [pytest.mark.version_1]
 
 
 def test_1_dice():
