@@ -19,7 +19,7 @@ class GameLogic():
     def calculate_score(dice_roll: tuple[int]) -> int:
         # raise error if input is not tuple
         if not isinstance(dice_roll,tuple):
-            raise TypeError('Can only calculate scores for dice rolls with integer values.')
+            raise TypeError('Can only calculate scores for dice rolls supplied in tuples.')
 
         # raise error if input tuple has any components other than integer
         if not all([isinstance(i, int) for i in dice_roll]):
