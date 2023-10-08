@@ -81,6 +81,9 @@ class Game():
             # increment to limit just in case this takes all day
             count += 1
 
+        # incase count exceed limit, exit game
+        self.end_game('honorable')
+
     def input_roll_bank_quit(self,str_prompt):
         count = 0
 
@@ -114,31 +117,44 @@ class Game():
             # increment to limit just in case this takes all day
             count += 1
 
+        # incase count exceed limit, exit game
+        self.end_game('honorable')
+
+    def round(self):
+        # loop per round
+        continue_round = True
+        while continue_round:
+            print(f"Rolling {len(self.rolled_dice)} dice...")
+            print(f'*** {" ".join([str(integer) for integer in self.rolled_dice])} ***')
+            # keep or quit
+            self.input_keep_quit("Enter dice to keep, or (q)uit:")
+            print(f"You have {self.unbanked_score} unbanked points and {len(self.rolled_dice)} dice remaining")
+            # roll, bank or quit
+            continue_round = self.input_roll_bank_quit("(r)oll again, (b)ank your points or (q)uit:")
+        return
+
     def play(self):
+        # print welcome statement
         print("Welcome to Ten Thousand")
 
+        # should we begin game
         self.round_num = self.input_begin_game("(y)es to play or (n)o to decline")
 
+        # the game
         while self.round_num > 0:
+            # begin round
             print(f"Starting round {self.round_num}")
 
-            # loop per round
-            continue_round = True
-            while continue_round:
-                print(f"Rolling {len(self.rolled_dice)} dice...")
-                print(f'*** {" ".join([str(integer) for integer in self.rolled_dice])} ***')
-                self.input_keep_quit("Enter dice to keep, or (q)uit:")
-                print(f"You have {self.unbanked_score} unbanked points and {len(self.rolled_dice)} dice remaining")
-                continue_round = self.input_roll_bank_quit("(r)oll again, (b)ank your points or (q)uit:")
-
+            # each round
+            self.round()
 
             # end of round increment
             self.round_num += 1
 
 
 
-# new_game = Game()
-# new_game.play()
+new_game = Game()
+new_game.play()
 
 
 

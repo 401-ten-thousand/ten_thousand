@@ -7,7 +7,7 @@ class GameLogic():
         if not isinstance(num, int):
             raise TypeError('Roll dice must be an integer')
         # raise error if input is outside of range
-        if num < 1 or num > 6:
+        if num < 0 or num > 6:
             raise ValueError('Roll dice must be between 1 and 6')
 
         dice_roll = []
