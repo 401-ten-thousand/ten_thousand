@@ -1,5 +1,5 @@
 import sys
-from game_logic import GameLogic
+from ten_thousand.game_logic import GameLogic
 from collections import Counter
 
 class Game():
@@ -10,22 +10,22 @@ class Game():
         self.kept_dice = ()
         self.round_num = 1
 
-    def end_game(self,discharge: str):
+    def end_game(self, discharge: str):
         if discharge == "dishonorable":
             print("OK. Maybe another time")
         else:
             print(f"Thanks for playing. You earned {self.banked_score} points")
         sys.exit()
 
-    def input_begin_game(self,str_prompt):
+    def input_begin_game(self, str_prompt):
         while True:
             # print prompt and collect input
             print(str_prompt)
-            user_input = str(input("> "))
+            user_input = input("> ")
 
             # if y then start game
             if user_input.lower() == 'y':
-                return
+                break
             # default exit game if wrong input
             else:
                 self.end_game('dishonorable')
@@ -35,6 +35,7 @@ class Game():
         if user_input.isdigit():
             # if exception raised; continue to next round
             try:
+                # TODO: calculate from kept_dice as well as user_input
                 int_user_input_score = GameLogic.calculate_score(tuple_user_input)
             except Exception:
                 return False
@@ -71,6 +72,7 @@ class Game():
 
         user_input = input("> ")
 
+        # TODO: need to fix error when input not integer
         tuple_user_input = tuple(int(char) for char in user_input)
 
         # should the game end
@@ -84,7 +86,6 @@ class Game():
             # update unbanked score
             self.unbanked_score = GameLogic.calculate_score(self.kept_dice)
 
-
             # if no dice left to roll
             if (6 - len(self.kept_dice)) == 0:
                 self.banked_score += self.unbanked_score
@@ -96,7 +97,7 @@ class Game():
         else:
             return False
 
-    def input_roll_bank_quit(self,str_prompt):
+    def input_roll_bank_quit(self, str_prompt):
         # print prompt and collect input
         print(str_prompt)
         user_input = input("> ")
@@ -114,6 +115,7 @@ class Game():
 
         # roll dice
         elif user_input.lower() == 'r':
+            # TODO: must have unrolled dice
             self.rolled_dice = GameLogic.roll_dice(6-len(self.kept_dice))
             return True
         else:
@@ -128,6 +130,7 @@ class Game():
             # keep or quit
             continue_round = self.input_keep_quit("Enter dice to keep, or (q)uit:")
             # if user input isn't is not valid or is non-scoring
+            # TODO: check remaining dice can't be scoring with kept dice
             if continue_round is False: break
             # round continues
             print(f"You have {self.unbanked_score} unbanked points and {len(self.rolled_dice)} dice remaining")
