@@ -13,7 +13,7 @@ class Game():
 
     def end_game(self,discharge: str):
         if discharge == "dishonorable":
-            print("OK. Maybe another time.")
+            print("OK. Maybe another time")
         else:
             print(f"Thanks for playing. You earned {self.banked_score} points")
         sys.exit()
@@ -21,6 +21,7 @@ class Game():
     def input_begin_game(self,str_prompt):
         count = 0
 
+        #TODO: while True:
         while count < 20:
             # print prompt and collect input
             print(str_prompt)
@@ -40,18 +41,21 @@ class Game():
     def input_keep_quit(self, str_prompt):
         count = 0
 
+        #TODO: while True:
         while count < 20:
             # print prompt and collect input
             print(str_prompt)
-            user_input = str(input("> "))
+            user_input = input("> ")
 
             # should the game end
             if user_input.lower() == 'q':
                 self.end_game('honorable')
 
             # are all input characters convertable to digits
+            #TODO: edge case decimal
             elif user_input.isdigit():
                 # make counter dictionary of input with integers as keys
+                #TODO: counter instance
                 dict_user_input = Counter([int(char) for char in user_input])
 
                 # check if all input character are in rolled dice and less than rolled dice counts
@@ -66,6 +70,7 @@ class Game():
                 # only update if all input character are in rolled dice and less than rolled dice counts
                 if bool_update_kept_dice:
                     # update kept dice
+                    # TODO: remove counter use input instead
                     for key, value in dict_user_input.items():
                         tuple_to_extend = tuple([key]*value)
                         self.kept_dice = self.kept_dice + tuple_to_extend
@@ -76,6 +81,7 @@ class Game():
 
                     # update unbanked score
                     self.unbanked_score = GameLogic.calculate_score(self.kept_dice)
+                #TODO: remove return
                 return
 
             # increment to limit just in case this takes all day
@@ -87,10 +93,11 @@ class Game():
     def input_roll_bank_quit(self,str_prompt):
         count = 0
 
+        # TODO: while True:
         while count < 20:
             # print prompt and collect input
             print(str_prompt)
-            user_input = str(input("> "))
+            user_input = input("> ")
 
             # should the game end
             if user_input.lower() == 'q':
@@ -106,7 +113,7 @@ class Game():
                 self.kept_dice = ()
                 self.rolled_dice = GameLogic.roll_dice(6)
                 self.rolled_dice_counter = Counter(self.rolled_dice)
-                return  False
+                return False
 
             # roll dice
             elif user_input.lower() == 'r':
@@ -127,10 +134,13 @@ class Game():
             print(f"Rolling {len(self.rolled_dice)} dice...")
             print(f'*** {" ".join([str(integer) for integer in self.rolled_dice])} ***')
             # keep or quit
+            #TODO: must keep at least once die and must be scoring die
+            #TODO: exit game if input unsatisfactory
             self.input_keep_quit("Enter dice to keep, or (q)uit:")
             print(f"You have {self.unbanked_score} unbanked points and {len(self.rolled_dice)} dice remaining")
             # roll, bank or quit
             continue_round = self.input_roll_bank_quit("(r)oll again, (b)ank your points or (q)uit:")
+        #TODO: remove return
         return
 
     def play(self):
@@ -141,6 +151,8 @@ class Game():
         self.round_num = self.input_begin_game("(y)es to play or (n)o to decline")
 
         # the game
+        #TODO: while True:
+        #TODO: twenty round max
         while self.round_num > 0:
             # begin round
             print(f"Starting round {self.round_num}")
