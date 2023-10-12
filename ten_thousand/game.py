@@ -1,4 +1,4 @@
-import sys
+# import sys
 from ten_thousand.game_logic import GameLogic
 # from game_logic import GameLogic
 from collections import Counter
@@ -16,7 +16,7 @@ class Game():
             print("OK. Maybe another time")
         else:
             print(f"Thanks for playing. You earned {self.banked_score} points")
-        sys.exit()
+        exit()
 
     def input_begin_game(self, str_prompt):
         while True:
@@ -188,8 +188,8 @@ class Game():
         self.end_game('honorable')
 
 
-new_game = Game()
-new_game.play()
+# new_game = Game()
+# new_game.play()
 
 
 
