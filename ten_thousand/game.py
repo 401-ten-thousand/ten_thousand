@@ -1,5 +1,6 @@
 import sys
 from ten_thousand.game_logic import GameLogic
+# from game_logic import GameLogic
 from collections import Counter
 
 class Game():
@@ -30,19 +31,11 @@ class Game():
             else:
                 self.end_game('dishonorable')
 
-    def is_valid_input(self, user_input, tuple_user_input):
+    def is_valid_input(self, user_input):
         # input is all digits
         if user_input.isdigit():
-            # if exception raised; continue to next round
-            try:
-                # TODO: calculate from kept_dice as well as user_input
-                int_user_input_score = GameLogic.calculate_score(tuple_user_input)
-            except Exception:
-                return False
-
-            # if no scorable points or empty input; continue to next round
-            if int_user_input_score == 0:
-                return False
+            # convert user input into tuple
+            tuple_user_input = tuple(int(char) for char in user_input)
 
             # make counter dictionary of input with integers as keys
             counter_user_input = Counter(tuple_user_input)
@@ -64,7 +57,16 @@ class Game():
 
         # if not all digits
         else:
+            # print('testing...not valid input')
             return False
+
+    def does_roll_add_points(self,tuple_rolled_dice:tuple=()) -> bool:
+        # if no scorable points; continue to next round
+        if GameLogic.calculate_score(tuple_rolled_dice) == 0:
+            return False
+        else:
+            return True
+
 
     def input_keep_quit(self, str_prompt):
         # print prompt and collect input
@@ -72,30 +74,36 @@ class Game():
 
         user_input = input("> ")
 
-        # TODO: need to fix error when input not integer
-        tuple_user_input = tuple(int(char) for char in user_input)
-
         # should the game end
         if user_input.lower() == 'q':
             self.end_game('honorable')
 
         # if user input is valid
-        elif self.is_valid_input(user_input, tuple_user_input):
-            # update kept dice
-            self.kept_dice = self.kept_dice + tuple_user_input
-            # update unbanked score
-            self.unbanked_score = GameLogic.calculate_score(self.kept_dice)
+        elif self.is_valid_input(user_input):
+            # convert user input into tuple
+            tuple_user_input = tuple(int(char) for char in user_input)
 
-            # if no dice left to roll
-            if (6 - len(self.kept_dice)) == 0:
-                self.banked_score += self.unbanked_score
-                return False
-            #otherwise roll remaining dice
+            # update unbanked score
+            self.kept_dice = self.kept_dice + tuple_user_input
+            self.unbanked_score += GameLogic.calculate_score(tuple_user_input)
+
+            # if all dice kept, allow for 6 new dice
+            if (len(self.kept_dice) % 6) == 0:
+                self.kept_dice = ()
+                self.rolled_dice = GameLogic.roll_dice(6)
+            # otherwise roll remaining dice
             else:
-                self.rolled_dice = GameLogic.roll_dice(6 - len(self.kept_dice))
-                return True
-        else:
+                self.rolled_dice = GameLogic.roll_dice(6-(len(self.kept_dice) % 6))
+
+
+
+            # not cheater or typo
             return False
+
+        else:
+            # cheater or typo
+            # print("cheater or typo")
+            return True
 
     def input_roll_bank_quit(self, str_prompt):
         # print prompt and collect input
@@ -115,8 +123,6 @@ class Game():
 
         # roll dice
         elif user_input.lower() == 'r':
-            # TODO: must have unrolled dice
-            self.rolled_dice = GameLogic.roll_dice(6-len(self.kept_dice))
             return True
         else:
             return False
@@ -124,14 +130,33 @@ class Game():
     def round(self):
         # loop per round
         continue_round = True
+        typo_cheater = False
         while continue_round:
-            print(f"Rolling {len(self.rolled_dice)} dice...")
+            # if cheater was true skip this print
+            if not typo_cheater:
+                print(f"Rolling {len(self.rolled_dice)} dice...")
+            else:
+                # if cheater was true change it back
+                typo_cheater = False
+
             print(f'*** {" ".join([str(integer) for integer in self.rolled_dice])} ***')
+
+            # does roll add points
+            continue_round = self.does_roll_add_points(self.rolled_dice)
+            # if no points available with roll
+            if not continue_round:
+                print("****************************************", "**        Zilch!!! Round over         **",
+                      "****************************************", sep="\n")
+                print(f"You banked 0 points in round {self.round_num}")
+                print(f"Total score is {self.banked_score} points")
+                break
+
             # keep or quit
-            continue_round = self.input_keep_quit("Enter dice to keep, or (q)uit:")
-            # if user input isn't is not valid or is non-scoring
-            # TODO: check remaining dice can't be scoring with kept dice
-            if continue_round is False: break
+            typo_cheater = self.input_keep_quit("Enter dice to keep, or (q)uit:")
+            if typo_cheater:
+                print("Cheater!!! Or possibly made a typo...")
+                continue
+
             # round continues
             print(f"You have {self.unbanked_score} unbanked points and {len(self.rolled_dice)} dice remaining")
             # roll, bank or quit
