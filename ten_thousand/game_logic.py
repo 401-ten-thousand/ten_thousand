@@ -1,6 +1,12 @@
 import random
 
 class GameLogic():
+    def __init__(self, mock_rolls: list[tuple]):
+        self.mock_rolls = mock_rolls
+        
+    def mock_roll_dice(self, _):
+        return self.mock_rolls.pop(0)
+
     @staticmethod
     def roll_dice(num: int) -> tuple[int]:
         # raise error if wrong type is inputted

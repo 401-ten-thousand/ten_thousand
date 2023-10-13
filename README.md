@@ -1,5 +1,5 @@
 # TITLE:
-401 Lab 06: Ten-Thousand
+401: Ten-Thousand
 
 ## AUTHORS:
 Kiengchay Gomez
@@ -8,17 +8,30 @@ Jacob Bassett
 ## DESCRIPTION:
 We are building the game Ten Thousand. You can learn more about the game here. [wiki](https://en.wikipedia.org/wiki/Dice_10000) Or play it here. [play](https://www.playonlinedicegames.com/farkle)
 
-
 ## RUN:
+To run the script open a terminal navigate into the ten-thousand directory and run the follow command.
+
+```zsh
+python -m ten_thousand.game
+```
 
 ## TEST:
-Run the following command to implement all tests for the commandline.
-`pytest`
+To run all unit tests open a terminal navigate into the ten-thousand directory and run the follow command.
 
+```zsh
+# for all tests
+pytest
+# for sim tests only
+pytest -k test_sim
+# for tests regarding calculate score function
+pytest -k test_calculate_score
+# for tests regarding
+pytest -k test_roll_dice
+```
 
 =======
 ## VERSION:
-1.0.0
+3.0.0
 
 ## DATES:
 10/4/2023 to 10/__/2023
