@@ -1,8 +1,11 @@
 import random
 
 class GameLogic():
-    def __init__(self, mock_rolls):
+    def __init__(self, mock_rolls: list[tuple]):
         self.mock_rolls = mock_rolls
+        
+    def mock_roll_dice(self, _):
+        return self.mock_rolls.pop(0)
 
     @staticmethod
     def roll_dice(num: int) -> tuple[int]:
@@ -19,7 +22,7 @@ class GameLogic():
         return tuple(dice_roll)
 
     @staticmethod
-    def calculate_score(dice_roll: tuple[int] = mock_rolls.pop(0)) -> int:
+    def calculate_score(dice_roll: tuple[int]) -> int:
         # raise error if input is not tuple
         if not isinstance(dice_roll,tuple):
             raise TypeError('Can only calculate scores for dice rolls supplied in tuples.')

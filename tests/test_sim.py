@@ -31,14 +31,14 @@ def compare_output_and_expected(captured_output, lines):
 @pytest.mark.parametrize(
     "test_input",
     [
-        # "tests/sims/bank_first_for_two_rounds.sim.txt",
-        # "tests/sims/bank_one_roll_then_quit.sim.txt",
-        # "tests/sims/cheat_and_fix.sim.txt",
-        # "tests/sims/hot_dice.sim.txt",
-        # "tests/sims/one_and_done.sim.txt",
+        "tests/sims/bank_first_for_two_rounds.sim.txt",
+        "tests/sims/bank_one_roll_then_quit.sim.txt",
+        "tests/sims/cheat_and_fix.sim.txt",
+        "tests/sims/hot_dice.sim.txt",
+        "tests/sims/one_and_done.sim.txt",
         "tests/sims/quitter.sim.txt",
-        # "tests/sims/repeat_roller.sim.txt",
-        # "tests/sims/zilcher.sim.txt",
+        "tests/sims/repeat_roller.sim.txt",
+        "tests/sims/zilcher.sim.txt",
     ],
 )
 def test_all(monkeypatch, capsys, test_input):
@@ -58,11 +58,10 @@ def test_all(monkeypatch, capsys, test_input):
 
     monkeypatch.setattr("builtins.input", mock_input)
 
-    # TODO: Add instance to GameLogic
     test_instance = GameLogic(mock_rolls)
 
     with pytest.raises(SystemExit):
-        play(test_instance.mock_roller)
+        Game(test_instance.calculate_score,test_instance.mock_roll_dice).play()
 
     captured_output = capsys.readouterr().out  # everything that's printed to the terminal
     compare_output_and_expected(captured_output, lines)

@@ -1,15 +1,15 @@
-# import sys
 from ten_thousand.game_logic import GameLogic
-# from game_logic import GameLogic
 from collections import Counter
 
 class Game():
-    def __init__(self):
+    def __init__(self,calculate_score=GameLogic.calculate_score, roll_dice=GameLogic.roll_dice):
         self.unbanked_score = 0
         self.banked_score = 0
-        self.rolled_dice = GameLogic.roll_dice(6)
         self.kept_dice = ()
         self.round_num = 1
+        self.calculate_score = calculate_score
+        self.roll_dice = roll_dice
+        self.rolled_dice = ()
 
     def end_game(self, discharge: str):
         if discharge == "dishonorable":
@@ -33,9 +33,10 @@ class Game():
 
     def is_valid_input(self, user_input):
         # input is all digits
+        user_input = user_input.replace(" ","")
         if user_input.isdigit():
             # convert user input into tuple
-            tuple_user_input = tuple(int(char) for char in user_input)
+            tuple_user_input = tuple(int(char) for char in user_input if char.isdigit())
 
             # make counter dictionary of input with integers as keys
             counter_user_input = Counter(tuple_user_input)
@@ -62,7 +63,7 @@ class Game():
 
     def does_roll_add_points(self,tuple_rolled_dice:tuple=()) -> bool:
         # if no scorable points; continue to next round
-        if GameLogic.calculate_score(tuple_rolled_dice) == 0:
+        if self.calculate_score(tuple_rolled_dice) == 0:
             return False
         else:
             return True
@@ -81,21 +82,11 @@ class Game():
         # if user input is valid
         elif self.is_valid_input(user_input):
             # convert user input into tuple
-            tuple_user_input = tuple(int(char) for char in user_input)
+            tuple_user_input = tuple(int(char) for char in user_input if char.isdigit())
 
             # update unbanked score
             self.kept_dice = self.kept_dice + tuple_user_input
-            self.unbanked_score += GameLogic.calculate_score(tuple_user_input)
-
-            # if all dice kept, allow for 6 new dice
-            if (len(self.kept_dice) % 6) == 0:
-                self.kept_dice = ()
-                self.rolled_dice = GameLogic.roll_dice(6)
-            # otherwise roll remaining dice
-            else:
-                self.rolled_dice = GameLogic.roll_dice(6-(len(self.kept_dice) % 6))
-
-
+            self.unbanked_score += self.calculate_score(tuple_user_input)
 
             # not cheater or typo
             return False
@@ -123,6 +114,13 @@ class Game():
 
         # roll dice
         elif user_input.lower() == 'r':
+            # if all dice kept, allow for 6 new dice
+            if (len(self.kept_dice) % 6) == 0:
+                self.kept_dice = ()
+                self.rolled_dice = self.roll_dice(6)
+            # otherwise roll remaining dice
+            else:
+                self.rolled_dice = self.roll_dice(6-(len(self.kept_dice) % 6))
             return True
         else:
             return False
@@ -158,7 +156,7 @@ class Game():
                 continue
 
             # round continues
-            print(f"You have {self.unbanked_score} unbanked points and {len(self.rolled_dice)} dice remaining")
+            print(f"You have {self.unbanked_score} unbanked points and {6 if len(self.kept_dice) == 6 else 6-len(self.kept_dice)} dice remaining")
             # roll, bank or quit
             continue_round = self.input_roll_bank_quit("(r)oll again, (b)ank your points or (q)uit:")
 
@@ -174,13 +172,14 @@ class Game():
             # begin round
             print(f"Starting round {self.round_num}")
 
+            self.rolled_dice = self.roll_dice(6)
+
             # each round
             self.round()
 
             # roll new dice
             self.unbanked_score = 0
             self.kept_dice = ()
-            self.rolled_dice = GameLogic.roll_dice(6)
 
             # end of round increment
             self.round_num += 1
@@ -188,8 +187,13 @@ class Game():
         self.end_game('honorable')
 
 
-# new_game = Game()
-# new_game.play()
+
+if __name__ == "__main__":
+    # inst_game_logic = GameLogic([(1,2,3,4,5,6),(1,1,2,2,3,3)])
+    # new_game = Game(inst_game_logic.calculate_score, inst_game_logic.mock_roll_dice)
+    new_game = Game()
+    new_game.play()
+
 
 
 
