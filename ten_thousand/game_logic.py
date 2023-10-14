@@ -68,72 +68,55 @@ import random
 class GameLogic:
     @staticmethod
     def roll_dice(dice_count):
+        # confirms dice_count is between 1 and 6, inclusive
         if not 1 <= dice_count <= 6:
             raise ValueError("Number of dice should be between 1 and 6.")
         return tuple(random.randint(1, 6) for _ in range(dice_count))
 
     @staticmethod
     def calculate_score(dice):
-        # if len(set(dice)) == 6 and sum(dice) == 21:
-        #     return 1500
-        #
-        # counts = [0] * 7
-        # for die in dice:
-        #     counts[die] += 1
-        #
-        # if all(count == 2 for count in counts[1:7]):
-        #     return 1500
-        #
-        # for i in range(1, 7):
-        #     if counts[i] == 6:
-        #         return 2400
-        #
-        # score = 0
-        # for i in range(1, 7):
-        #     if counts[i] >= 3:
-        #         if i == 1:
-        #             score += 1000 * (counts[i] - 2)
-        #         else:
-        #             score += i * 100 * (counts[i] - 2)
-        #     if i == 5:
-        #         score += counts[i] * 50
-        #
-        # for i in range(1, 7):
-        #     if counts[i] == 4:
-        #         return 1200
-        #     if counts[i] == 2:
-        #         for j in range(1, 7):
-        #             if counts[j] == 2 and j != i:
-        #                 return 1200
-        #
-        # return score
-
+        # if dice is empty (falsy)
         if not dice:
             return 0
 
+        #creates a Counter dictionary holding the dice_value as a key,and the count as a value
         counter_dice = Counter(dice)
+
+        # checks for straight
         if len(counter_dice) == 6:
             return 1500
+        # checks for three pairs
         if len(set(dice)) == 3 and all(value == 2 for value in counter_dice.values()):
             return 1500
+        # checks for two sets (or trips)
         if len(set(dice)) == 2 and all(value == 3 for value in counter_dice.values()):
             return 1200
 
+        # initialize starting score at 0
         score = 0
+        # loops through the items (key, value) in our Counter dictionary
         for value, count in counter_dice.items():
+            # scoring methodology for 1s
             if value == 1:
+                # if count is 3 or more, first 3 are worth 1000 points and each extra count adds 1000
                 if count >= 3:
                     score += 1000 * (count - 2)
+                # if count is 2 or less, then each 1 is worth 100 points
                 if count <= 2:
                     score += 100 * count
+            # scoring methodology for 5s
             elif value == 5:
+                # if count is 3 or more, first 3 are worth 500 points and each extra count adds 500
                 if count >= 3:
                     score += 500 * (count - 2)
+                # if count is 2 or less, then each 5 is worth 50 points
                 if count <= 2:
                     score += 50 * count
+            # scoring methodology for remaining dice values, minimum count is 3
             elif value in [2, 3, 4, 6] and count >= 3:
                 score += value * 100 * (count - 2)
 
+        # returns score
         return score
 
 
