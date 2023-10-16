@@ -156,11 +156,51 @@ class Bank2650_Roll3_Bot(BaseBot):
 
         return super()._enter_dice()
 
+class Bank2000_Roll3_Bot(BaseBot):
+    def _roll_bank_or_quit(self):
+        if self.unbanked_points >= 2000:
+            return 'b'
+        if self.dice_remaining <= 3:
+            return 'b'
+        else:
+            return 'r'
+
+    def _enter_dice(self):
+
+        return super()._enter_dice()
+
+class Bank2000_Roll2_Bot(BaseBot):
+    def _roll_bank_or_quit(self):
+        if self.unbanked_points >= 2000:
+            return 'b'
+        if self.dice_remaining <= 2:
+            return 'b'
+        else:
+            return 'r'
+
+    def _enter_dice(self):
+
+        return super()._enter_dice()
+
+class Bank500_Bot(BaseBot):
+    def _roll_bank_or_quit(self):
+        if self.unbanked_points >= 500:
+            return 'b'
+        else:
+            return 'r'
+
+    def _enter_dice(self):
+
+        return super()._enter_dice()
+
 
 if __name__ == "__main__":
     num_games = 1000
     NervousNellie.play(num_games)
     Bank2650_Roll3_Bot.play(num_games)
+    Bank2000_Roll3_Bot.play(num_games)
+    Bank2000_Roll2_Bot.play(num_games)
+    Bank500_Bot.play(num_games)
 
 
 
