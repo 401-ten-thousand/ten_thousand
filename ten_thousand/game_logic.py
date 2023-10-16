@@ -71,3 +71,44 @@ class GameLogic():
                 elif key == 1:
                     c_score += (value * 100)
         return c_score
+    
+    @staticmethod
+    def get_scorers(dice_roll: list[int]) -> str:
+        # raise error if input is not tuple
+        if not isinstance(dice_roll,list):
+            raise TypeError('Can only calculate scores for dice rolls supplied in a list.')
+
+        # raise error if input tuple has any components other than integer
+        if not all([isinstance(i, int) for i in dice_roll]):
+            raise TypeError('Can only calculate scores for dice rolls with integer values.')
+
+        # raise error if tuple is wrong size
+        if len(dice_roll) < 0 or len(dice_roll) > 6:
+            raise ValueError('Can only calculate scores for 1-6 dice rolls.')
+
+        # raise error if tuple contains integers outside of range
+        if any([True if i<1 or i>6 else False for i in dice_roll]):
+            raise ValueError("Values inside of tuple fall outside")
+
+        counter = {}
+        str_return = ""
+
+        # make counter dictionary
+        for index, value in enumerate(dice_roll):
+            if value in counter:
+                counter[value] += 1
+            else:
+                counter[value] = 1
+
+        # find 6 unique values which means there is a straight
+        if len(counter.keys()) == 6 and all([True if value == 1 else False for value in counter.values()]):
+            return "".join([str(i) for i in dice_roll])
+        # find 3 unique values checking for 3 pairs
+        elif len(counter.keys()) == 3 and all([True if value == 2 else False for value in counter.values()]):
+            return "".join([str(i) for i in dice_roll])
+        # find trio+
+        else:
+            for key, value in counter.items():
+                if value >= 3 or key==5 or key==1:
+                    str_return += (str(key)*value)
+        return str_return
