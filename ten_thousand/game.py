@@ -143,8 +143,9 @@ class Game():
             continue_round = self.does_roll_add_points(self.rolled_dice)
             # if no points available with roll
             if not continue_round:
-                print("****************************************", "**        Zilch!!! Round over         **",
-                      "****************************************", sep="\n")
+                print("****************************************")
+                print("**        Zilch!!! Round over         **")
+                print("****************************************")
                 print(f"You banked 0 points in round {self.round_num}")
                 print(f"Total score is {self.banked_score} points")
                 break
