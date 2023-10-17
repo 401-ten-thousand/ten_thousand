@@ -29,6 +29,18 @@ pytest -k test_calculate_score
 pytest -k test_roll_dice
 ```
 
+## BOTS:
+We built some bots to play the game. You can review this code in the 'bots.py' file. If you would like to run these bots, open a terminal run the following command and expect something similar to the following.
+
+```zsh
+(.venv) ➜  ten-thousand git:(finish-bots) python bots.py
+NervousNellie: 1000 games played with average score of 8255
+Bank2650_Roll3_Bot: 1000 games played with average score of 10370
+Bank2000_Roll3_Bot: 1000 games played with average score of 10234
+Bank2000_Roll2_Bot: 1000 games played with average score of 10241
+Bank500_Bot: 1000 games played with average score of 8584
+```
+
 =======
 ## VERSION:
 3.0.0
