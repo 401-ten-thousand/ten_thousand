@@ -41,12 +41,11 @@ Bank2000_Roll2_Bot: 1000 games played with average score of 10241
 Bank500_Bot: 1000 games played with average score of 8584
 ```
 
-=======
 ## VERSION:
 3.0.0
 
 ## DATES:
-10/4/2023 to 10/__/2023
+10/4/2023 to 10/16/2023
 
 ## TOOLS:
 python==3.11
